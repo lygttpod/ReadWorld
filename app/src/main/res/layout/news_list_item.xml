@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="match_parent"
+android:layout_height="80dp"
+android:layout_margin="5dp"
+android:orientation="horizontal"
+android:padding="5dp" >
+
+<ImageView
+    android:id="@+id/imageView_news"
+    android:layout_width="110.0dip"
+    android:layout_height="80.0dip"
+    android:src="@mipmap/ic_launcher" />
+
+<LinearLayout
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_vertical"
+    android:layout_marginLeft="5.0dip"
+    android:gravity="center_vertical"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/news_title"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="3.0dip"
+        android:layout_marginTop="5.0dip"
+        android:ellipsize="end"
+        android:gravity="center_vertical"
+        android:singleLine="true"
+        android:text="keyword"
+        android:textColor="#ff010101"
+        android:textSize="16.0sp" />
+
+    <TextView
+        android:id="@+id/news_digest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="2.0dip"
+        android:layout_marginTop="2.0dip"
+        android:text="title"
+
+        android:textSize="15.0sp" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="2.0dip"
+        android:layout_marginTop="2.0dip"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="阅读次数："
+            android:textSize="10sp" />
+
+        <TextView
+            android:id="@+id/news_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="count"
+            android:textSize="10sp" />
+
+        <TextView
+            android:id="@+id/news_time"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginRight="5dp"
+            android:gravity="right"
+            android:text="time"
+            android:textSize="10sp" />
+    </LinearLayout>
+</LinearLayout>
+
+</LinearLayout>
