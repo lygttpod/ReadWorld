@@ -3,6 +3,7 @@ package com.allen.readworld.application;
 import android.app.Application;
 import android.content.Context;
 
+import com.allen.readworld.bean.TopListBean;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.cache.memory.impl.UsingFreqLimitedMemoryCache;
@@ -13,15 +14,28 @@ import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
 import com.nostra13.universalimageloader.utils.StorageUtils;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Allen on 15/9/20.
  */
 public class MyAppcaltion extends Application {
+
+    List<TopListBean> topListBeans;
+
+    public List<TopListBean> getTopListBeans() {
+        return topListBeans;
+    }
+
+    public void setTopListBeans(List<TopListBean> topListBeans) {
+        this.topListBeans = topListBeans;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
-
+        topListBeans = new ArrayList<TopListBean>();
         initImageLoader(getApplicationContext());
     }
 

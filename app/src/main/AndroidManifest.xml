@@ -11,7 +11,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".activity.HomeActivity"
+            android:name=".activity.SplashActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,6 +20,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.NewsListActivity"></activity>
+        <activity android:name=".activity.HomeActivity1"></activity>
     </application>
 
 </manifest>
