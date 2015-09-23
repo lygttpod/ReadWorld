@@ -51,7 +51,7 @@ public class SplashActivity extends Activity {
                 Intent intent = new Intent();
                 intent.setClass(SplashActivity.this,HomeActivity1.class);
                 startActivity(intent);
-                this.onFinish();
+                SplashActivity.this.finish();
 
             }
 
