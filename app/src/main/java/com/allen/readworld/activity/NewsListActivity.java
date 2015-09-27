@@ -1,10 +1,8 @@
 package com.allen.readworld.activity;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.format.DateUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -12,27 +10,20 @@ import android.widget.ListView;
 import com.allen.readworld.R;
 
 import com.allen.readworld.adapter.NewsListAdapter;
-import com.allen.readworld.bean.NewsBean;
 import com.allen.readworld.bean.NewsListBean;
-import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.squareup.okhttp.Callback;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
 
-import org.apache.http.Header;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
+
+import cz.msebera.android.httpclient.Header;
 
 
 /**
@@ -50,7 +41,7 @@ public class NewsListActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.newlist_fragment);
         init();
         initPullToRefresh();
         sendRequest(count,true);

@@ -1,7 +1,7 @@
 package com.allen.readworld.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
@@ -9,8 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import com.allen.readworld.R;
+import com.allen.readworld.activity.NewsDetailActivity;
 import com.allen.readworld.adapter.NewsListAdapter;
 import com.allen.readworld.bean.NewsListBean;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
@@ -19,17 +21,19 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
-import org.apache.http.Header;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import cz.msebera.android.httpclient.Header;
+
 /**
  * Created by Allen on 15/9/23.
  */
 public class NewListFragment extends Fragment {
+    private ProgressBar progressBar;
     private PullToRefreshListView pullToRefreshListView;
     private AsyncHttpClient asyncHttpClient;
     NewsListAdapter newsListAdapter;
@@ -45,7 +49,8 @@ public class NewListFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.activity_main,container,false);
+        View view = inflater.inflate(R.layout.newlist_fragment,container,false);
+        progressBar = (ProgressBar)view.findViewById(R.id.progressBar2);
         init();
         initPullToRefresh(view);
         sendRequest(count,true);
@@ -94,7 +99,11 @@ public class NewListFragment extends Fragment {
         pullToRefreshListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                Intent intent = new Intent();
+                intent.setClass(getActivity(), NewsDetailActivity.class);
+                intent.putExtra("docid",newsListBeans.get(position-1).getDocid());
+                intent.putExtra("img", newsListBeans.get(position - 1).getImgsrc());
+                startActivity(intent);
             }
         });
         ListView actualListView = pullToRefreshListView.getRefreshableView();
@@ -104,6 +113,12 @@ public class NewListFragment extends Fragment {
         String urlString = "http://c.3g.163.com/nc/article/headline/"+tid+"/"+count+".html";
         AsyncHttpClient client = new AsyncHttpClient();
         client.get(urlString, new AsyncHttpResponseHandler() {
+
+            @Override
+            public void onStart() {
+                super.onStart();
+                progressBar.setVisibility(ProgressBar.VISIBLE);
+            }
 
             @Override
             public void onFailure(int i, Header[] headers, byte[] bytes, Throwable throwable) {
@@ -122,6 +137,7 @@ public class NewListFragment extends Fragment {
             @Override
             public void onFinish() {
                 super.onFinish();
+                progressBar.setVisibility(ProgressBar.GONE);
                 pullToRefreshListView.onRefreshComplete();
 
                 newsListAdapter.notifyDataSetChanged();
