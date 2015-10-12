@@ -8,13 +8,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 
 import com.allen.readworld.R;
 import com.allen.readworld.activity.NewsDetailActivity;
 import com.allen.readworld.adapter.NewsListAdapter;
 import com.allen.readworld.bean.NewsListBean;
+import com.allen.readworld.utils.ScreenSizeUtil;
+import com.allen.readworld.widget.BannerPager;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -26,6 +31,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -54,6 +60,7 @@ public class NewListFragment extends Fragment {
         init();
         initPullToRefresh(view);
         sendRequest(count,true);
+
         return view;
     }
 
@@ -62,6 +69,7 @@ public class NewListFragment extends Fragment {
         newsListBeans = new ArrayList<NewsListBean>();
         newsListAdapter = new NewsListAdapter(getActivity(),newsListBeans);
     }
+
 
     private void initPullToRefresh(View view){
         pullToRefreshListView = (PullToRefreshListView)view.findViewById(R.id.toplist_pull_to_refresh);

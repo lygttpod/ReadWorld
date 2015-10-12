@@ -61,6 +61,7 @@ public class HomeActivity extends BaseActivity {
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         viewPager.setAdapter(myFragmentAdapter);
         viewPager.setCurrentItem(0);
+        viewPager.setOffscreenPageLimit(3);
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
