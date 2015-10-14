@@ -23,6 +23,7 @@
         <activity android:name=".activity.NewsListActivity"></activity>
         <activity android:name=".activity.HomeActivity"></activity>
         <activity android:name=".activity.NewsDetailActivity"></activity>
+        <activity android:name=".activity.ChannelActivity"></activity>
     </application>
 
 </manifest>

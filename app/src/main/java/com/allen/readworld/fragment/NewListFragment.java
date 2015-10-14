@@ -44,35 +44,51 @@ public class NewListFragment extends Fragment {
     private AsyncHttpClient asyncHttpClient;
     NewsListAdapter newsListAdapter;
     ArrayList<NewsListBean> newsListBeans;
-    String tid ="";
-    int c=0;
-    String count = (c+"-"+(c+10));
+    String tid;
+    int c = 0;
+    String count = (c + "-" + (c + 10));
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Bundle bundle = getArguments();
+        tid = bundle != null ? bundle.getString("tid") : "";
+    }
 
-    public NewListFragment(String tid) {
-        this.tid = tid;
+    /**
+     * 此方法意思为fragment是否可见 ,可见时候加载数据
+     *
+     * @param isVisibleToUser
+     */
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        if (isVisibleToUser) {
+            //fragment可见时加载数据
+                sendRequest(count, true);
+        } else {
+            //fragment不可见时不执行操作
+        }
+        super.setUserVisibleHint(isVisibleToUser);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.newlist_fragment,container,false);
-        progressBar = (ProgressBar)view.findViewById(R.id.progressBar2);
+        View view = inflater.inflate(R.layout.newlist_fragment, container, false);
+        progressBar = (ProgressBar) view.findViewById(R.id.progressBar2);
         init();
         initPullToRefresh(view);
-        sendRequest(count,true);
 
         return view;
     }
 
-    private void init(){
-        //tid = getIntent().getStringExtra("tid");
+    private void init() {
         newsListBeans = new ArrayList<NewsListBean>();
-        newsListAdapter = new NewsListAdapter(getActivity(),newsListBeans);
+        newsListAdapter = new NewsListAdapter(getActivity(), newsListBeans);
     }
 
 
-    private void initPullToRefresh(View view){
-        pullToRefreshListView = (PullToRefreshListView)view.findViewById(R.id.toplist_pull_to_refresh);
+    private void initPullToRefresh(View view) {
+        pullToRefreshListView = (PullToRefreshListView) view.findViewById(R.id.toplist_pull_to_refresh);
         String label = DateUtils.formatDateTime(getActivity(), System.currentTimeMillis(),
                 DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE
                         | DateUtils.FORMAT_ABBREV_ALL);
@@ -94,14 +110,14 @@ public class NewListFragment extends Fragment {
         pullToRefreshListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-                sendRequest("0-10",true);
+                sendRequest("0-10", true);
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-                c=newsListBeans.size();
-                count = (c+"-"+(c+10));
-                sendRequest(count,false);
+                c = newsListBeans.size();
+                count = (c + "-" + (c + 10));
+                sendRequest(count, false);
             }
         });
         pullToRefreshListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -109,7 +125,7 @@ public class NewListFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent();
                 intent.setClass(getActivity(), NewsDetailActivity.class);
-                intent.putExtra("docid",newsListBeans.get(position-1).getDocid());
+                intent.putExtra("docid", newsListBeans.get(position - 1).getDocid());
                 intent.putExtra("img", newsListBeans.get(position - 1).getImgsrc());
                 startActivity(intent);
             }
@@ -117,8 +133,9 @@ public class NewListFragment extends Fragment {
         ListView actualListView = pullToRefreshListView.getRefreshableView();
         actualListView.setAdapter(newsListAdapter);
     }
-    private void sendRequest (String count, final boolean isClear){
-        String urlString = "http://c.3g.163.com/nc/article/headline/"+tid+"/"+count+".html";
+
+    private void sendRequest(String count, final boolean isClear) {
+        String urlString = "http://c.3g.163.com/nc/article/headline/" + tid + "/" + count + ".html";
         AsyncHttpClient client = new AsyncHttpClient();
         client.get(urlString, new AsyncHttpResponseHandler() {
 
@@ -135,11 +152,10 @@ public class NewListFragment extends Fragment {
 
             @Override
             public void onSuccess(int i, Header[] headers, byte[] bytes) {
-                if (isClear){
+                if (isClear) {
                     newsListBeans.clear();
                 }
                 handlejson(bytes);
-//
             }
 
             @Override
@@ -153,19 +169,19 @@ public class NewListFragment extends Fragment {
         });
 
     }
-    private void handlejson(byte[] bytes){
+
+    private void handlejson(byte[] bytes) {
         String jsonString = new String(bytes);
         JSONObject jsonObject = null;
         try {
-            jsonObject= new JSONObject(jsonString);
+            jsonObject = new JSONObject(jsonString);
 //            String tidString = jsonObject.getString(tid);
             JSONArray tidArr = jsonObject.getJSONArray(tid);
             for (int i = 0; i < tidArr.length(); i++) {
                 JSONObject json = tidArr.getJSONObject(i);
-                NewsListBean newsListBean = new NewsListBean(json.getString("title"),json.getString("digest"),json.getString("docid"),json.getString("replyCount"),json.getString("ptime"),json.getString("imgsrc"));
+                NewsListBean newsListBean = new NewsListBean(json.getString("title"), json.getString("digest"), json.getString("docid"), json.getString("replyCount"), json.getString("ptime"), json.getString("imgsrc"));
                 newsListBeans.add(newsListBean);
             }
-
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 
 import com.allen.readworld.bean.TopListBean;
+import com.allen.readworld.db.SQLHelper;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.cache.memory.impl.UsingFreqLimitedMemoryCache;
@@ -21,7 +22,8 @@ import java.util.List;
  * Created by Allen on 15/9/20.
  */
 public class MyAppcaltion extends Application {
-
+    private static MyAppcaltion mAppApplication;
+    private SQLHelper sqlHelper;
     List<TopListBean> topListBeans;
 
     public List<TopListBean> getTopListBeans() {
@@ -35,6 +37,7 @@ public class MyAppcaltion extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        mAppApplication = this;
         topListBeans = new ArrayList<TopListBean>();
         initImageLoader(getApplicationContext());
     }
@@ -65,5 +68,24 @@ public class MyAppcaltion extends Application {
                 .build();
         // 全局初始化此配置
         ImageLoader.getInstance().init(config);
+    }
+    /** 获取Application */
+    public static MyAppcaltion getApp() {
+        return mAppApplication;
+    }
+    /** 获取数据库Helper */
+    public SQLHelper getSQLHelper() {
+        if (sqlHelper == null)
+            sqlHelper = new SQLHelper(mAppApplication);
+        return sqlHelper;
+    }
+
+    @Override
+    public void onTerminate() {
+        // TODO Auto-generated method stub
+        if (sqlHelper != null)
+            sqlHelper.close();
+        super.onTerminate();
+        //整体摧毁的时候调用这个方法
     }
 }
