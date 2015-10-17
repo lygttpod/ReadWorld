@@ -7,9 +7,9 @@ import android.widget.ProgressBar;
 
 import com.allen.readworld.R;
 import com.allen.readworld.application.MyAppcaltion;
-import com.allen.readworld.bean.ChannelItem;
-import com.allen.readworld.bean.ChannelManage;
-import com.allen.readworld.bean.TopListBean;
+
+import com.allen.readworld.db.greenrobot.gen.ChannelItem;
+import com.allen.readworld.utils.GreenDaoUtils;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
@@ -36,6 +36,7 @@ public class SplashActivity extends BaseActivity {
     List<ChannelItem> otherChannelList;
 
     Handler handler = new Handler();
+    GreenDaoUtils greenDaoUtils;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,14 +44,14 @@ public class SplashActivity extends BaseActivity {
         progressBar = (ProgressBar)findViewById(R.id.progressBar);
         myAppcaltion = (MyAppcaltion)getApplicationContext();
        // topListBeans = new ArrayList<>();
-
+        greenDaoUtils = new GreenDaoUtils(SplashActivity.this);
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 userChannelList = new ArrayList<ChannelItem>();
                 otherChannelList = new ArrayList<ChannelItem>();
-                if (ChannelManage.getManage(MyAppcaltion.getApp().getSQLHelper())
-                        .getUserChannel().size() <= 0) {
+
+                if (greenDaoUtils.getChannelItems(1).size()<=0){
                     sendRequest();
                 }else {
                     Intent intent = new Intent();
@@ -58,6 +59,7 @@ public class SplashActivity extends BaseActivity {
                     startActivity(intent);
                     SplashActivity.this.finish();
                 }
+
 
             }
         },1000);
@@ -115,25 +117,21 @@ public class SplashActivity extends BaseActivity {
                         || json.get("tname").equals("科技")
                         || json.get("tname").equals("手机")) {
                     isSelect = 1;
-                    ChannelItem channelItem = new ChannelItem(b,
+                    ChannelItem channelItem = new ChannelItem(
                             json.getString("tname"), json.getString("tid"), b,
                             isSelect);
                     userChannelList.add(channelItem);
                 } else {
-                    ChannelItem channelItem = new ChannelItem(b,
-                            json.getString("tname"), json.getString("tid"), b,
+                    ChannelItem channelItem = new ChannelItem(
+                            json.getString("tname"), json.getString("tid"), b+100,
                             isSelect);
                     otherChannelList.add(channelItem);
                 }
 
-//                TopListBean topListBean = new TopListBean(json.getString("tname"),json.getString("tid"));
-//                topListBeans.add(topListBean);
             }
-            ChannelManage.getManage(MyAppcaltion.getApp().getSQLHelper())
-                    .saveOtherChannel(otherChannelList);
-            ChannelManage.getManage(MyAppcaltion.getApp().getSQLHelper())
-                    .saveUserChannel(userChannelList);
-            //myAppcaltion.setTopListBeans(topListBeans);
+            greenDaoUtils.saveUserChannel(userChannelList);
+            greenDaoUtils.saveOtherChannel(otherChannelList);
+
         } catch (JSONException e) {
             e.printStackTrace();
         }

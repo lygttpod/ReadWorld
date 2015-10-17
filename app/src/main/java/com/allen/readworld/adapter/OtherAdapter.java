@@ -10,7 +10,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.allen.readworld.R;
-import com.allen.readworld.bean.ChannelItem;
+import com.allen.readworld.db.greenrobot.gen.ChannelItem;
 
 
 public class OtherAdapter extends BaseAdapter {

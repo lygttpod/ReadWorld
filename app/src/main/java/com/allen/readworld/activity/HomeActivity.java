@@ -15,9 +15,10 @@ import android.widget.Toast;
 import com.allen.readworld.R;
 import com.allen.readworld.adapter.MyFragmentAdapter;
 import com.allen.readworld.application.MyAppcaltion;
-import com.allen.readworld.bean.ChannelItem;
-import com.allen.readworld.bean.ChannelManage;
+
+import com.allen.readworld.db.greenrobot.gen.ChannelItem;
 import com.allen.readworld.fragment.NewListFragment;
+import com.allen.readworld.utils.GreenDaoUtils;
 import com.allen.readworld.utils.ScreenSizeUtil;
 
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ import java.util.List;
  */
 public class HomeActivity extends BaseActivity {
     //List<TopListBean> topListBeans;
+    MyFragmentAdapter myFragmentAdapter;
     List<ChannelItem> userChannelList;
     String urlString = "http://c.3g.163.com/nc/topicset/android/subscribe/manage/listspecial.html";
     private HorizontalScrollView mNaviga_scroll;
@@ -52,10 +54,13 @@ public class HomeActivity extends BaseActivity {
 
     private ImageView channelIV;
 
+    private GreenDaoUtils greenDaoUtils;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home1);
+        greenDaoUtils = new GreenDaoUtils(HomeActivity.this);
         channelIV = (ImageView) findViewById(R.id.add_naviga_itme_bt);
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         userChannelList = new ArrayList<>();
@@ -67,6 +72,7 @@ public class HomeActivity extends BaseActivity {
         initColumnData();
         initTabColumn();
         initViewPage();
+        selectTab(0);
         channelIV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,6 +92,7 @@ public class HomeActivity extends BaseActivity {
                     initColumnData();
                     initTabColumn();
                     initViewPage();
+                    selectTab(0);
                     Toast.makeText(HomeActivity.this, "onActivityResult", Toast.LENGTH_LONG).show();
                 }
                 break;
@@ -107,8 +114,8 @@ public class HomeActivity extends BaseActivity {
             viewList.add(newListFragment);
         }
 
-        MyFragmentAdapter myFragmentAdapter = new MyFragmentAdapter(getSupportFragmentManager(), viewList);
-        myFragmentAdapter.notifyDataSetChanged();
+        myFragmentAdapter = new MyFragmentAdapter(getSupportFragmentManager(), viewList);
+
         viewPager.setAdapter(myFragmentAdapter);
         viewPager.setCurrentItem(0);
         viewPager.setOffscreenPageLimit(1);
@@ -135,8 +142,9 @@ public class HomeActivity extends BaseActivity {
      * 获取Column栏目 数据
      */
     private void initColumnData() {
-        userChannelList = ChannelManage.getManage(MyAppcaltion.getApp().getSQLHelper())
-                .getUserChannel();
+//        userChannelList = ChannelManage.getManage(MyAppcaltion.getApp().getSQLHelper())
+//                .getUserChannel();
+        userChannelList = greenDaoUtils.getChannelItems(1);
     }
 
 
