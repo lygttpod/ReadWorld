@@ -1,26 +1,29 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent"  tools:context=".MainActivity">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
 
-<com.handmark.pulltorefresh.library.PullToRefreshListView
-    android:id="@+id/toplist_pull_to_refresh"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:cacheColorHint="#00000000"
-    android:divider="#19000000"
-    android:dividerHeight="1dp"
-    android:fadingEdge="none"
-    android:fastScrollEnabled="false"
-    android:footerDividersEnabled="false"
-    android:headerDividersEnabled="false"
-    android:smoothScrollbar="true"></com.handmark.pulltorefresh.library.PullToRefreshListView>
+
+    <com.handmark.pulltorefresh.library.PullToRefreshListView
+        android:id="@+id/toplist_pull_to_refresh"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:cacheColorHint="#00000000"
+        android:divider="#19000000"
+        android:dividerHeight="1dp"
+        android:fadingEdge="none"
+        android:fastScrollEnabled="false"
+        android:footerDividersEnabled="false"
+        android:headerDividersEnabled="false"
+        android:smoothScrollbar="true"></com.handmark.pulltorefresh.library.PullToRefreshListView>
 
     <ProgressBar
+        android:id="@+id/progressBar2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/progressBar2"
-        android:visibility="gone"
+        android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:visibility="gone" />
 
 </RelativeLayout>

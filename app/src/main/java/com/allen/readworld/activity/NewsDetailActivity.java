@@ -3,6 +3,7 @@ package com.allen.readworld.activity;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.view.View;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -40,11 +41,23 @@ public class NewsDetailActivity extends Activity {
     ImageView imageView;
     List<ImgBean> imgBeans;
     private ProgressBar progressBar;
+    private ImageView backIV;
+    private TextView centerTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_newsdetail);
+        centerTitle = (TextView)findViewById(R.id.titlebar_centerTV);
+        centerTitle.setText("新闻详情");
+        backIV = (ImageView)findViewById(R.id.titlebar_backIV);
+        backIV.setVisibility(View.VISIBLE);
+        backIV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         imgBeans = new ArrayList<>();
         docid = getIntent().getStringExtra("docid");
         img = getIntent().getStringExtra("img");

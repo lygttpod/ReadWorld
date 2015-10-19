@@ -10,6 +10,7 @@ import com.allen.readworld.application.MyAppcaltion;
 
 import com.allen.readworld.db.greenrobot.gen.ChannelItem;
 import com.allen.readworld.utils.GreenDaoUtils;
+import com.allen.readworld.utils.LogUtil;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
@@ -37,6 +38,7 @@ public class SplashActivity extends BaseActivity {
 
     Handler handler = new Handler();
     GreenDaoUtils greenDaoUtils;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,7 +46,7 @@ public class SplashActivity extends BaseActivity {
         progressBar = (ProgressBar)findViewById(R.id.progressBar);
         myAppcaltion = (MyAppcaltion)getApplicationContext();
        // topListBeans = new ArrayList<>();
-        greenDaoUtils = new GreenDaoUtils(SplashActivity.this);
+        greenDaoUtils = myAppcaltion.getGreenDaoUtils();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -105,11 +107,14 @@ public class SplashActivity extends BaseActivity {
     private void handlejson(byte[] bytes){
         String jsonStr = new String(bytes);
         JSONObject jsonObject = null;
+        StringBuilder stringBuilder = new StringBuilder();
         try {
             jsonObject = new JSONObject(jsonStr);
             JSONArray jsonArray = jsonObject.getJSONArray("tList");
             for (int b = 0; b < jsonArray.length(); b++) {
                 JSONObject json = jsonArray.getJSONObject(b);
+
+                stringBuilder.append("tname="+json.getString("tname")+"tid="+json.getString("tid")+"\n");
 
                 int isSelect = 0;
                 if (json.get("tname").equals("头条")
@@ -129,6 +134,7 @@ public class SplashActivity extends BaseActivity {
                 }
 
             }
+            LogUtil.d("data", stringBuilder.toString());
             greenDaoUtils.saveUserChannel(userChannelList);
             greenDaoUtils.saveOtherChannel(otherChannelList);
 

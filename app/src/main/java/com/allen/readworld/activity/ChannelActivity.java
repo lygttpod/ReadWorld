@@ -3,11 +3,13 @@ package com.allen.readworld.activity;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
@@ -64,12 +66,35 @@ public class ChannelActivity extends Activity implements OnItemClickListener {
      */
     boolean isMove = false;
     GreenDaoUtils greenDaoUtils;
+    MyAppcaltion myAppcaltion;
+    private ImageView backIV;
+    private TextView centerTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.channel);
-        greenDaoUtils = new GreenDaoUtils(ChannelActivity.this);
+        centerTitle = (TextView) findViewById(R.id.titlebar_centerTV);
+        centerTitle.setText("频道管理");
+        backIV = (ImageView) findViewById(R.id.titlebar_backIV);
+        backIV.setVisibility(View.VISIBLE);
+        backIV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (userAdapter.isListChanged()) {
+                    saveChannel();
+                    Intent intent = new Intent(getApplicationContext(),
+                            MainActivity.class);
+                    setResult(HomeActivity.CHANNELRESULT, intent);
+                    Log.d(TAG, "数据发生改变");
+                }else {
+                    finish();
+                }
+            }
+        });
+        myAppcaltion = (MyAppcaltion) getApplication();
+        greenDaoUtils = myAppcaltion.getGreenDaoUtils();
+        //greenDaoUtils = new GreenDaoUtils(ChannelActivity.this);
         initView();
         initData();
     }
@@ -287,26 +312,34 @@ public class ChannelActivity extends Activity implements OnItemClickListener {
         greenDaoUtils.saveOtherChannel(otherAdapter.getChannnelLst());
     }
 
+
     @Override
-    public void onBackPressed() {
-
-
-        if (userAdapter.isListChanged()) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    saveChannel();
-                }
-            }).start();
-
-            Intent intent = new Intent(getApplicationContext(),
-                    MainActivity.class);
-            setResult(HomeActivity.CHANNELRESULT, intent);
-            finish();
-            Log.d(TAG, "数据发生改变");
-        } else {
-            super.onBackPressed();
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (userAdapter.isListChanged()) {
+                saveChannel();
+                Intent intent = new Intent(getApplicationContext(),
+                        MainActivity.class);
+                setResult(HomeActivity.CHANNELRESULT, intent);
+                Log.d(TAG, "数据发生改变");
+            }
         }
-        //overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+        return super.onKeyDown(keyCode, event);
     }
+
+//    @Override
+//    public void onBackPressed() {
+//
+//
+//        if (userAdapter.isListChanged()) {
+//            Intent intent = new Intent(getApplicationContext(),
+//                    MainActivity.class);
+//            setResult(HomeActivity.CHANNELRESULT, intent);
+//            finish();
+//            Log.d(TAG, "数据发生改变");
+//        } else {
+//            super.onBackPressed();
+//        }
+//        //overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+//    }
 }

@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <include layout="@layout/titlebar_layout"></include>
     <include layout="@layout/column_horizontalscrollview_layout"></include>
 
     <android.support.v4.view.ViewPager

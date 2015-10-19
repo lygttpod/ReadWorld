@@ -19,6 +19,7 @@ import com.allen.readworld.application.MyAppcaltion;
 import com.allen.readworld.db.greenrobot.gen.ChannelItem;
 import com.allen.readworld.fragment.NewListFragment;
 import com.allen.readworld.utils.GreenDaoUtils;
+import com.allen.readworld.utils.LogUtil;
 import com.allen.readworld.utils.ScreenSizeUtil;
 
 import java.util.ArrayList;
@@ -55,12 +56,18 @@ public class HomeActivity extends BaseActivity {
     private ImageView channelIV;
 
     private GreenDaoUtils greenDaoUtils;
+    private MyAppcaltion myAppcaltion;
+    NewListFragment newListFragment;
+    TextView titlebar_title;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home1);
-        greenDaoUtils = new GreenDaoUtils(HomeActivity.this);
+        titlebar_title = (TextView)findViewById(R.id.titlebar_centerTV);
+        titlebar_title.setText("观天下");
+        myAppcaltion = (MyAppcaltion) getApplication();
+        greenDaoUtils = myAppcaltion.getGreenDaoUtils();
         channelIV = (ImageView) findViewById(R.id.add_naviga_itme_bt);
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         userChannelList = new ArrayList<>();
@@ -93,7 +100,7 @@ public class HomeActivity extends BaseActivity {
                     initTabColumn();
                     initViewPage();
                     selectTab(0);
-                    Toast.makeText(HomeActivity.this, "onActivityResult", Toast.LENGTH_LONG).show();
+                    //Toast.makeText(HomeActivity.this, "onActivityResult", Toast.LENGTH_LONG).show();
                 }
                 break;
 
@@ -109,7 +116,7 @@ public class HomeActivity extends BaseActivity {
             Bundle bundle = new Bundle();
             bundle.putString("tid", userChannelList.get(i).getTid());
             //Fragment fragment = new NewListFragment();
-            NewListFragment newListFragment = new NewListFragment();
+            newListFragment = new NewListFragment();
             newListFragment.setArguments(bundle);
             viewList.add(newListFragment);
         }
@@ -118,8 +125,8 @@ public class HomeActivity extends BaseActivity {
 
         viewPager.setAdapter(myFragmentAdapter);
         viewPager.setCurrentItem(0);
-        viewPager.setOffscreenPageLimit(1);
-        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        viewPager.setOffscreenPageLimit(3);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -127,6 +134,7 @@ public class HomeActivity extends BaseActivity {
 
             @Override
             public void onPageSelected(int position) {
+                //Toast.makeText(HomeActivity.this, "position=" + position, Toast.LENGTH_SHORT).show();
                 viewPager.setCurrentItem(position);
                 selectTab(position);
             }
@@ -136,6 +144,7 @@ public class HomeActivity extends BaseActivity {
 
             }
         });
+
     }
 
     /**
@@ -145,6 +154,14 @@ public class HomeActivity extends BaseActivity {
 //        userChannelList = ChannelManage.getManage(MyAppcaltion.getApp().getSQLHelper())
 //                .getUserChannel();
         userChannelList = greenDaoUtils.getChannelItems(1);
+
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < userChannelList.size(); i++) {
+
+            stringBuilder.append(userChannelList.get(i).getName() + "tid=" + userChannelList.get(i).getTid() + "\n");
+        }
+        LogUtil.d("data", "------------------------------------");
+        LogUtil.d("data", stringBuilder.toString());
     }
 
 
@@ -181,7 +198,9 @@ public class HomeActivity extends BaseActivity {
                         else {
                             localView.setSelected(true);
                             selectTab(i);
+                            //Toast.makeText(HomeActivity.this, "i=" + i, Toast.LENGTH_SHORT).show();
                             viewPager.setCurrentItem(i);
+
                         }
                     }
                     Toast.makeText(getApplicationContext(), userChannelList.get(v.getId()).getName(), Toast.LENGTH_SHORT).show();

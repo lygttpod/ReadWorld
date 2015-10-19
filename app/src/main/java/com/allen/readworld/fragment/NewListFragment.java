@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.allen.readworld.R;
 import com.allen.readworld.activity.NewsDetailActivity;
@@ -48,36 +49,39 @@ public class NewListFragment extends Fragment {
     int c = 0;
     String count = (c + "-" + (c + 10));
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle bundle = getArguments();
         tid = bundle != null ? bundle.getString("tid") : "";
+
     }
 
-    /**
-     * 此方法意思为fragment是否可见 ,可见时候加载数据
-     *
-     * @param isVisibleToUser
-     */
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        if (isVisibleToUser) {
-            //fragment可见时加载数据
-                sendRequest(count, true);
-        } else {
-            //fragment不可见时不执行操作
-        }
-        super.setUserVisibleHint(isVisibleToUser);
-    }
+//    /**
+//     * 此方法意思为fragment是否可见 ,可见时候加载数据
+//     *
+//     * @param isVisibleToUser
+//     */
+//    @Override
+//    public void setUserVisibleHint(boolean isVisibleToUser) {
+//        if (isVisibleToUser) {
+//            //fragment可见时加载数据
+//
+//        } else {
+//            //fragment不可见时不执行操作
+//        }
+//        super.setUserVisibleHint(isVisibleToUser);
+//    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.newlist_fragment, container, false);
+
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar2);
         init();
         initPullToRefresh(view);
-
+        sendRequest(count, true);
         return view;
     }
 

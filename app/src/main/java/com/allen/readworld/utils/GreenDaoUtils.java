@@ -29,6 +29,7 @@ public class GreenDaoUtils {
 
     public DaoMaster getDaoMaster(Context context) {
         if (daoMaster == null) {
+            LogUtil.d("GreenDaoUtils","创建数据库");
             OpenHelper helper = new DaoMaster.DevOpenHelper(context,
                     "database_name", null);
             daoMaster = new DaoMaster(helper.getWritableDatabase());

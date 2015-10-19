@@ -5,6 +5,7 @@ import android.content.Context;
 
 import com.allen.readworld.bean.TopListBean;
 import com.allen.readworld.db.SQLHelper;
+import com.allen.readworld.utils.GreenDaoUtils;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.cache.memory.impl.UsingFreqLimitedMemoryCache;
@@ -26,6 +27,8 @@ public class MyAppcaltion extends Application {
     private SQLHelper sqlHelper;
     List<TopListBean> topListBeans;
 
+    GreenDaoUtils greenDaoUtils;
+
     public List<TopListBean> getTopListBeans() {
         return topListBeans;
     }
@@ -34,12 +37,22 @@ public class MyAppcaltion extends Application {
         this.topListBeans = topListBeans;
     }
 
+    public GreenDaoUtils getGreenDaoUtils() {
+        return greenDaoUtils;
+    }
+
+    public void setGreenDaoUtils(GreenDaoUtils greenDaoUtils) {
+        this.greenDaoUtils = greenDaoUtils;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
         mAppApplication = this;
+        greenDaoUtils = new GreenDaoUtils(mAppApplication);
         topListBeans = new ArrayList<TopListBean>();
         initImageLoader(getApplicationContext());
+        mAppApplication.setGreenDaoUtils(greenDaoUtils);
     }
 
     public static void initImageLoader(Context context) {
