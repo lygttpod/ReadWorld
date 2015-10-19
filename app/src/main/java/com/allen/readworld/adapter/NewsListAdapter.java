@@ -54,7 +54,6 @@ public class NewsListAdapter extends BaseAdapter {
             viewHolder.title = (TextView)convertView.findViewById(R.id.news_title);
             viewHolder.digest = (TextView)convertView.findViewById(R.id.news_digest);
             viewHolder.ptime = (TextView)convertView.findViewById(R.id.news_time);
-            viewHolder.replyCount = (TextView)convertView.findViewById(R.id.news_count);
             viewHolder.imgsrc = (ImageView)convertView.findViewById(R.id.imageView_news);
 
             convertView.setTag(viewHolder);
@@ -65,12 +64,11 @@ public class NewsListAdapter extends BaseAdapter {
         viewHolder.title.setText(newsListBeans.get(position).getTitle());
         viewHolder.digest.setText(newsListBeans.get(position).getDigest());
         viewHolder.ptime.setText(newsListBeans.get(position).getPtime());
-        viewHolder.replyCount.setText(newsListBeans.get(position).getReplyCount());
 
         // 显示图片的配置
         DisplayImageOptions options = new DisplayImageOptions.Builder()
-                .showImageOnLoading(R.mipmap.ic_launcher)
-                .showImageOnFail(R.mipmap.ic_launcher).cacheInMemory(true)
+                .showImageOnLoading(R.mipmap.base_list_default_icon)
+                .showImageOnFail(R.mipmap.base_list_default_icon).cacheInMemory(true)
                 .cacheOnDisk(true).bitmapConfig(Bitmap.Config.RGB_565).build();
         ImageLoader.getInstance()
                 .displayImage(
@@ -83,7 +81,6 @@ public class NewsListAdapter extends BaseAdapter {
 
         TextView title;
         TextView digest;
-        TextView replyCount;
         TextView ptime;
         ImageView imgsrc;
     }

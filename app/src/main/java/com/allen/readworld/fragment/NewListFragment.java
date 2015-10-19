@@ -19,6 +19,7 @@ import com.allen.readworld.R;
 import com.allen.readworld.activity.NewsDetailActivity;
 import com.allen.readworld.adapter.NewsListAdapter;
 import com.allen.readworld.bean.NewsListBean;
+import com.allen.readworld.utils.LogUtil;
 import com.allen.readworld.utils.ScreenSizeUtil;
 import com.allen.readworld.widget.BannerPager;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
@@ -46,8 +47,8 @@ public class NewListFragment extends Fragment {
     NewsListAdapter newsListAdapter;
     ArrayList<NewsListBean> newsListBeans;
     String tid;
-    int c = 0;
-    String count = (c + "-" + (c + 10));
+    static int c = 0;
+    static String count;
 
 
     @Override
@@ -81,7 +82,7 @@ public class NewListFragment extends Fragment {
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar2);
         init();
         initPullToRefresh(view);
-        sendRequest(count, true);
+        sendRequest("0-10", true);
         return view;
     }
 
@@ -119,7 +120,8 @@ public class NewListFragment extends Fragment {
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-                c = newsListBeans.size();
+                //c = newsListBeans.size();
+                c += 10;
                 count = (c + "-" + (c + 10));
                 sendRequest(count, false);
             }
@@ -140,6 +142,8 @@ public class NewListFragment extends Fragment {
 
     private void sendRequest(String count, final boolean isClear) {
         String urlString = "http://c.3g.163.com/nc/article/headline/" + tid + "/" + count + ".html";
+
+        LogUtil.d("readworld", "urlString=" + urlString);
         AsyncHttpClient client = new AsyncHttpClient();
         client.get(urlString, new AsyncHttpResponseHandler() {
 
@@ -181,9 +185,11 @@ public class NewListFragment extends Fragment {
             jsonObject = new JSONObject(jsonString);
 //            String tidString = jsonObject.getString(tid);
             JSONArray tidArr = jsonObject.getJSONArray(tid);
-            for (int i = 0; i < tidArr.length(); i++) {
+            for (int i = 1; i < tidArr.length(); i++) {
                 JSONObject json = tidArr.getJSONObject(i);
-                NewsListBean newsListBean = new NewsListBean(json.getString("title"), json.getString("digest"), json.getString("docid"), json.getString("replyCount"), json.getString("ptime"), json.getString("imgsrc"));
+                //NewsListBean newsListBean = new NewsListBean(json.getString("title"), json.getString("digest"), json.getString("docid"), json.getString("replyCount"), json.getString("ptime"), json.getString("imgsrc"));
+                NewsListBean newsListBean = new NewsListBean(json.getString("title"), json.getString("digest"), json.getString("docid"), json.getString("ptime"), json.getString("imgsrc"));
+
                 newsListBeans.add(newsListBean);
             }
         } catch (JSONException e) {

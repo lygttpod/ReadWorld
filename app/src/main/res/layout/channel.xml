@@ -40,7 +40,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="12.0dip"
-                    android:text="单机增删频道，长按拖拽排序"
+                    android:text="单击增删频道，长按拖拽排序"
                     android:textColor="@color/subscribe_tip_text"
                     android:textSize="11.0sp" />
             </LinearLayout>

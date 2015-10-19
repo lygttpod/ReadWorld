@@ -132,7 +132,7 @@ public class NewsListActivity extends Activity {
             JSONArray tidArr = jsonObject.getJSONArray(tid);
             for (int i = 0; i < tidArr.length(); i++) {
                 JSONObject json = tidArr.getJSONObject(i);
-                NewsListBean newsListBean = new NewsListBean(json.getString("title"),json.getString("digest"),json.getString("docid"),json.getString("replyCount"),json.getString("ptime"),json.getString("imgsrc"));
+                NewsListBean newsListBean = new NewsListBean(json.getString("title"),json.getString("digest"),json.getString("docid"),json.getString("ptime"),json.getString("imgsrc"));
                 newsListBeans.add(newsListBean);
             }
 

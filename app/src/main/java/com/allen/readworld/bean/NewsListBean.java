@@ -22,15 +22,13 @@ public class NewsListBean {
     String title;
     String digest;
     String docid;
-    String replyCount;
     String ptime;
     String imgsrc;
 
-    public NewsListBean(String title, String digest, String docid, String replyCount, String ptime, String imgsrc) {
+    public NewsListBean(String title, String digest, String docid,  String ptime, String imgsrc) {
         this.title = title;
         this.digest = digest;
         this.docid = docid;
-        this.replyCount = replyCount;
         this.ptime = ptime;
         this.imgsrc = imgsrc;
     }
@@ -59,13 +57,6 @@ public class NewsListBean {
         this.docid = docid;
     }
 
-    public String getReplyCount() {
-        return replyCount;
-    }
-
-    public void setReplyCount(String replyCount) {
-        this.replyCount = replyCount;
-    }
 
     public String getPtime() {
         return ptime;

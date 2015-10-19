@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.allen.readworld.R;
 import com.allen.readworld.application.MyAppcaltion;
@@ -43,9 +44,9 @@ public class SplashActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        progressBar = (ProgressBar)findViewById(R.id.progressBar);
-        myAppcaltion = (MyAppcaltion)getApplicationContext();
-       // topListBeans = new ArrayList<>();
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        myAppcaltion = (MyAppcaltion) getApplicationContext();
+        // topListBeans = new ArrayList<>();
         greenDaoUtils = myAppcaltion.getGreenDaoUtils();
         handler.postDelayed(new Runnable() {
             @Override
@@ -53,22 +54,22 @@ public class SplashActivity extends BaseActivity {
                 userChannelList = new ArrayList<ChannelItem>();
                 otherChannelList = new ArrayList<ChannelItem>();
 
-                if (greenDaoUtils.getChannelItems(1).size()<=0){
+                if (greenDaoUtils.getChannelItems(1).size() <= 0) {
                     sendRequest();
-                }else {
+                } else {
                     Intent intent = new Intent();
-                    intent.setClass(SplashActivity.this,HomeActivity.class);
+                    intent.setClass(SplashActivity.this, HomeActivity.class);
                     startActivity(intent);
                     SplashActivity.this.finish();
                 }
 
 
             }
-        },1000);
+        }, 1000);
 
     }
 
-    private void sendRequest (){
+    private void sendRequest() {
 
         AsyncHttpClient client = new AsyncHttpClient();
         client.get(urlString, new AsyncHttpResponseHandler() {
@@ -80,15 +81,14 @@ public class SplashActivity extends BaseActivity {
 
             @Override
             public void onFailure(int i, Header[] headers, byte[] bytes, Throwable throwable) {
-
-
+                Toast.makeText(SplashActivity.this, "数据获取失败，稍后再试...", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onSuccess(int i, Header[] headers, byte[] bytes) {
                 handlejson(bytes);
                 Intent intent = new Intent();
-                intent.setClass(SplashActivity.this,HomeActivity.class);
+                intent.setClass(SplashActivity.this, HomeActivity.class);
                 startActivity(intent);
                 SplashActivity.this.finish();
 
@@ -104,7 +104,7 @@ public class SplashActivity extends BaseActivity {
     }
 
 
-    private void handlejson(byte[] bytes){
+    private void handlejson(byte[] bytes) {
         String jsonStr = new String(bytes);
         JSONObject jsonObject = null;
         StringBuilder stringBuilder = new StringBuilder();
@@ -114,13 +114,16 @@ public class SplashActivity extends BaseActivity {
             for (int b = 0; b < jsonArray.length(); b++) {
                 JSONObject json = jsonArray.getJSONObject(b);
 
-                stringBuilder.append("tname="+json.getString("tname")+"tid="+json.getString("tid")+"\n");
+                stringBuilder.append("tname=" + json.getString("tname") + "tid=" + json.getString("tid") + "\n");
 
                 int isSelect = 0;
                 if (json.get("tname").equals("头条")
                         || json.get("tname").equals("娱乐")
                         || json.get("tname").equals("科技")
-                        || json.get("tname").equals("手机")) {
+                        || json.get("tname").equals("手机")
+                        || json.get("tname").equals("NBA")
+                        || json.get("tname").equals("社会")
+                        || json.get("tname").equals("体育")) {
                     isSelect = 1;
                     ChannelItem channelItem = new ChannelItem(
                             json.getString("tname"), json.getString("tid"), b,
@@ -128,7 +131,7 @@ public class SplashActivity extends BaseActivity {
                     userChannelList.add(channelItem);
                 } else {
                     ChannelItem channelItem = new ChannelItem(
-                            json.getString("tname"), json.getString("tid"), b+100,
+                            json.getString("tname"), json.getString("tid"), b + 100,
                             isSelect);
                     otherChannelList.add(channelItem);
                 }
