@@ -11,7 +11,6 @@ import android.widget.TextView;
 
 import com.allen.readworld.R;
 import com.allen.readworld.bean.NewsListBean;
-import com.allen.readworld.bean.TopListBean;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -78,7 +77,6 @@ public class NewsListAdapter extends BaseAdapter {
     }
 
     public class ViewHolder{
-
         TextView title;
         TextView digest;
         TextView ptime;
